@@ -1,0 +1,33 @@
+specVersion: 1.0.0
+name: turing-staking-rewards
+version: 0.1.0
+runner:
+  node:
+    name: '@subql/node'
+    version: '>=1.0.0'
+  query:
+    name: '@subql/query'
+    version: '*'
+description: Index and search Turing Network staking rewards
+repository: 'https://github.com/nvengal/turing-staking-rewards'
+schema:
+  file: ./schema.graphql
+network:
+  chainId: '0x0f62b701fb12d02237a33b84818c11f621653d2b1614c777973babf4652b535d'
+  endpoint: 'wss://rpc.turing.oak.tech'
+  dictionary: 'https://api.subquery.network/sq/subquery/polkadot-dictionary'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleBlock
+          kind: substrate/BlockHandler
+        - handler: handleEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Deposit
+        - handler: handleCall
+          kind: substrate/CallHandler
