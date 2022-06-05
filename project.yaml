@@ -18,16 +18,12 @@ network:
   dictionary: 'https://api.subquery.network/sq/subquery/polkadot-dictionary'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 1
+    startBlock: 296137 # First round with inflation enabled
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleBlock
-          kind: substrate/BlockHandler
-        - handler: handleEvent
+        - handler: handleParachainStakingReward
           kind: substrate/EventHandler
           filter:
-            module: balances
-            method: Deposit
-        - handler: handleCall
-          kind: substrate/CallHandler
+            module: parachainStaking
+            method: Rewarded
